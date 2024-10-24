@@ -1,5 +1,7 @@
 open Unix
 
+let ( >>= ) = Result.bind
+
 let set_raw_mode () =
   let term_io = tcgetattr stdin in
   let raw_mode = { term_io with c_icanon = false; c_echo = false } in
@@ -36,12 +38,14 @@ let rec loop () =
   if key <> "q" then loop ()
 
 let () =
-  let args = Sys.argv in
-  let filename = args.(1) in
-  let ic = open_in filename in
-  let len = in_channel_length ic in
-  let content = really_input_string ic len in
-  close_in ic;
-  let _ = Ft_ality.Parsing.parse_content content in
-  flush Stdlib.stdout;
-  loop ()
+  match Sys.argv with
+  | [| _; filename |] -> (
+      match
+        Ft_ality.Token.get filename >>= fun p ->
+        Ft_ality.Sanitize.sanitize_data p >>= fun _ -> Ok ()
+      with
+      | Ok _ -> loop ()
+      | Error e -> print_endline e)
+  | _ ->
+      print_endline "wrong number of arguments ";
+      exit 1
