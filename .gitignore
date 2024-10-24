@@ -1,0 +1,5 @@
+*.pdf
+_opam
+.DS_Store
+ft_ality
+_build
