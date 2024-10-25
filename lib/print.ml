@@ -1,16 +1,31 @@
-let ( >>= ) = Result.bind
+let max_w = 80
+let soi = string_of_int
+let get_transition_s (s, m, e) = "(" ^ soi s ^ ", [" ^ m ^ "], " ^ soi e ^ ")"
 
-let print_km (k, m) =
-  Printf.printf "(k:%s, m:%s)\n" k m;
-  Ok ()
+let get_combomap_s (finale_state, combo_name) =
+  "{" ^ soi finale_state ^ " -> " ^ combo_name ^ "}"
 
-let print_mn (m, n) =
-  m >>= fun moves_str ->
-  List.iter (fun m -> Printf.printf "%s," m) moves_str;
-  Printf.printf " - %s\n" n;
-  Ok ()
+let get_keymapping_s (key, movename) = key ^ " -> [" ^ movename ^ "]\n"
 
-let print_err = Result.iter_error (fun e -> print_endline @@ "error: " ^ e)
-let process_result f r = r >>= f |> print_err
-let print_k = List.iter (process_result print_km)
-let print_m = List.iter (process_result print_mn)
+let get_last_line s =
+  match List.rev @@ String.split_on_char '\n' s with
+  | [] -> ""
+  | last_line :: _ -> last_line
+
+let concat f acc tr =
+  let s = f tr in
+  if String.length (get_last_line acc) + String.length s > max_w then
+    acc ^ "\n" ^ s
+  else acc ^ s
+
+let concat_transitions acc tr = concat get_transition_s acc tr
+let concat_combomap acc combomap = concat get_combomap_s acc combomap
+let concat_keymapping acc keymapping = concat get_keymapping_s acc keymapping
+let print f title a = print_endline @@ List.fold_left f title a
+let print_transitions = print concat_transitions "Transitions:\n"
+let print_combomap = print concat_combomap "Final states -> combo name:\n"
+let print_keymapping = print concat_keymapping "key mapping:\n"
+
+let print_verbose tr cb =
+  print_transitions tr;
+  print_combomap cb

@@ -1,6 +1,6 @@
 let ( >>= ) = Result.bind
 let find_duplicate l = List.(length @@ sort_uniq String.compare l != length l)
-let difference l1 l2 = not @@ List.for_all (Fun.flip List.mem l1) l2
+let is_difference l1 l2 = not @@ List.for_all (Fun.flip List.mem l1) l2
 
 let sanitize_keymapping km =
   let k, m = List.split km in
@@ -14,7 +14,7 @@ let sanitize_combos cb kmn =
   let m_lst = List.map (fun a -> List.fold_left ( ^ ) "" a) combo_mv in
   if find_duplicate m_lst then Error "combo moves must be uniques"
   else
-    let combo_diff = List.filter (Fun.negate @@ difference kmn) combo_mv in
+    let combo_diff = List.filter (Fun.negate @@ is_difference kmn) combo_mv in
     if List.(length combo_diff != length combo_mv) then
       Error "combo move name must match with key mapping names"
     else Ok ()

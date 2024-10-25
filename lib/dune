@@ -1,2 +1,3 @@
 (library
- (name ft_ality))
+ (name ft_ality)
+ (libraries unix))
