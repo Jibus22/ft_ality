@@ -18,7 +18,7 @@ let evaluate (transitions, comboname_state_mapping, keymapping)
 
     let key = Ft_ality.Keyboard.detect_keypress () in
 
-    if key <> "q" then
+    if key <> "esc" then
       match
         find_move key keymapping >>= fun (_, move) ->
         log_move move;

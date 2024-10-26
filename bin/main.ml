@@ -3,7 +3,7 @@ let usage = "Usage: ft_ality [-v] <gmr-file>"
 let emptylogger _ _ = ()
 
 let exit_usage ?(opt = "") () =
-  print_endline @@ opt ^ usage;
+  prerr_endline @@ opt ^ usage;
   exit 1
 
 let start ?(v = false) filename =
@@ -21,7 +21,7 @@ let start ?(v = false) filename =
         ( Ft_ality.Print.log_move,
           Ft_ality.Print.log_combo_name,
           if v then Ft_ality.Print.log_verbose else emptylogger )
-  | Error e -> print_endline e
+  | Error e -> prerr_endline e
 
 let () =
   match Sys.argv with

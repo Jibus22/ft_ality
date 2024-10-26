@@ -21,7 +21,7 @@ let detect_keypress () =
         | 'C' -> "right"
         | 'D' -> "left"
         | _ -> ""
-      else ""
+      else "esc"
     else String.make 1 c1
   in
   restore_terminal_mode original_term_io;
