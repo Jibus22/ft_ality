@@ -2,7 +2,7 @@ NAME := ft_ality
 
 all:
 	dune build
-	cp _build/default/bin/main.exe $(NAME)
+	cp -f _build/default/bin/main.exe $(NAME)
 
 clean:
 	dune clean

@@ -66,7 +66,8 @@ let train combos =
   let final_states, transitions_lst =
     List.(fold_left get_transition_list [] combo_moves |> rev |> split)
   in
-  let comboname_state_mapping = List.combine final_states combo_names
+  let comboname_state_mapping =
+    List.combine final_states combo_names |> List.combine combo_moves
   and transitions =
     List.flatten transitions_lst
     |> List.sort_uniq tr_compare |> get_missing_transitions
