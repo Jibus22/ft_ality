@@ -1,3 +1,8 @@
+type transition = int * string * int
+type keymap = string * string
+type moves = string list
+type combomapping = moves * (int * string)
+
 let ( >>= ) = Option.bind
 let move_eq curr_k (k, _) = curr_k = k
 let transition_eq (cm, cs) (i, m, _) = cm = m && cs = i

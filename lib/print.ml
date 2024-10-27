@@ -1,3 +1,8 @@
+type transition = int * string * int
+type keymap = string * string
+type moves = string list
+type combomapping = moves * (int * string)
+
 let max_w = 80
 let delimiter = String.make max_w '*'
 let delimiter_nl = "\n" ^ String.make max_w '*'
@@ -41,8 +46,6 @@ let print_transitions =
   print ~nl:delimiter_nl concat_transitions "Transitions:\n"
 
 let print_keymapping = print ~nl:delimiter concat_keymapping "key mapping:\n"
-let log_move m = print_endline @@ get_move_s ~nl:"" m
-let log_verbose fs name = print_endline @@ get_verbose_s fs name
 
 let combo_logger v (moves, (fs, name)) transition =
   let verbose =

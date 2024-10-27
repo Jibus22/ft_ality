@@ -2,10 +2,6 @@ let pick_nested_move_lst pair_lst =
   let _, tr_lstlst = List.split pair_lst in
   List.flatten tr_lstlst
 
-let pick_nested_maxstate pair_lst =
-  let max_lst, _ = List.split pair_lst in
-  max_lst
-
 let tr_eq_partial (i1, m1) (i2, m2, _) = i1 = i2 && m1 = m2
 let concat_tr_lists pair_lst tr_lst = pick_nested_move_lst pair_lst @ tr_lst
 
