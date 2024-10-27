@@ -6,7 +6,7 @@ let str_of_char = String.make 1
 let make_pair ?(delimiter = ':') map_str =
   match String.split_on_char delimiter map_str with
   | [ lhs; rhs ] -> (
-      match (lhs, rhs) with
+      match (String.trim lhs, String.trim rhs) with
       | "", _ -> Error "Empty lhs"
       | _, "" -> Error "Empty rhs"
       | keymap -> Ok keymap)
@@ -18,7 +18,7 @@ let make_move_lst (m, n) =
     match String.split_on_char ',' m with
     | _ :: _ as move_lst ->
         if List.exists (String.equal "") move_lst then Error "Empty move"
-        else Ok move_lst
+        else Ok (move_lst |> List.map String.trim)
     | [] -> Error "Moves are missing"
   in
   Ok (moves, n)

@@ -34,6 +34,7 @@ let concat_combomap acc combomap = concat get_combomap_s acc combomap
 let concat_keymapping acc keymapping = concat get_keymapping_s acc keymapping
 let concat_moves acc move = concat (get_move_s ~nl:", ") acc move
 let fold f title lst = List.fold_left f title lst
+let get_moves_s = fold concat_moves ""
 let print ?(nl = "") f title a = print_endline @@ fold f title a ^ nl
 
 let print_transitions =
@@ -48,7 +49,7 @@ let combo_logger v (moves, (fs, name)) transition =
     "\n" ^ get_transition_s2 transition ^ get_verbose_s fs name ^ "\n"
   in
   print_endline
-  @@ (fold concat_moves "" moves |> remove_trailing_comma)
+  @@ (get_moves_s moves |> remove_trailing_comma)
   ^ (if v then verbose else "")
   ^ name
 
