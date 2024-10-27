@@ -1,0 +1,12 @@
+left:A
+right:D
+up:W
+down:S
+j:Punch
+k:Kick
+l:Block
+*
+A,A,D:Uppercut
+D,S,A:Roundhouse Kick
+W,A,W:Dive Punch
+A,D:Combo Strike

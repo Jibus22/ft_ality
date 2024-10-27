@@ -1,0 +1,12 @@
+left:<-
+right: ->
+up: ^
+down: v
+a:Light_Punch
+z:Heavy_Punch
+e:Fireball
+*
+^,v,^:Spinning Kick
+->,v,<-,^:Aerial Strike
+Light_Punch,^,v:Ground Pound
+Fireball,Heavy_Punch,^:Double Fireball

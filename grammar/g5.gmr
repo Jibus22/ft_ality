@@ -1,0 +1,12 @@
+left:LArrow
+right:RArrow
+up:UArrow
+down:DArrow
+w:Quick_Attack
+x:Heavy_Attack
+c:Grapple
+*
+UArrow,DArrow,UArrow:Shadow Strike
+RArrow,RArrow,LArrow:Whirlwind Punch
+DArrow,LArrow:Shadow Stomp
+Quick_Attack,Heavy_Attack,Grapple:Grapple Takedown

@@ -1,0 +1,12 @@
+left:Left
+right:Right
+up:Up
+down:Down
+q:High_Punch
+s:Low_Punch
+d:Throw
+*
+High_Punch,Low_Punch,Down:Backflip Kick
+Throw,Up,High_Punch:Head Smash
+Low_Punch,High_Punch:Lunging Strike
+Left,Right,High_Punch:Power Slam
