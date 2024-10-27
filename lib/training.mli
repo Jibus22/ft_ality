@@ -1,5 +1,6 @@
+type transition = int * string * int
+type moves = string list
+type combomapping = moves * (int * string)
+
 val train :
-  (string list * string) list ->
-  ( (int * string * int) list * (string list * (int * string)) list,
-    string )
-  result
+  (moves * string) list -> (transition list * combomapping list, string) result

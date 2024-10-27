@@ -1,3 +1,7 @@
+type transition = int * string * int
+type moves = string list
+type combomapping = moves * (int * string)
+
 let pick_nested_move_lst pair_lst =
   let _, tr_lstlst = List.split pair_lst in
   List.flatten tr_lstlst
