@@ -7,24 +7,23 @@ let find_move key keymapping = find move_eq key keymapping
 let find_transition curr transitions = find transition_eq curr transitions
 let find_final_state curr combo_st_map = find state_eq curr combo_st_map
 
-let evaluate (transitions, comboname_state_mapping, keymapping)
-    (_, log_combo_name, log_verbose) =
-  let rec loop current_state () =
-    (match find_final_state current_state comboname_state_mapping with
-    | Some (moves, (fs, name)) ->
-        log_verbose fs name;
-        log_combo_name moves name
-    | None -> ());
+let log_combo log ((_, _, next_state) as transition) mapping =
+  match find_final_state next_state mapping with
+  | Some combo_map -> log combo_map transition
+  | None -> ()
 
+let evaluate (transitions, comboname_state_mapping, keymapping) combo_logger =
+  let rec loop current_state () =
     let key = Ft_ality.Keyboard.detect_keypress () in
 
     if key <> "esc" then
       match
         find_move key keymapping >>= fun (_, move) ->
         find_transition (move, current_state) transitions
-        >>= fun (_, _, next_state) -> Some next_state
       with
-      | Some next_state -> loop next_state ()
+      | Some ((_, _, next_state) as transition) ->
+          log_combo combo_logger transition comboname_state_mapping;
+          loop next_state ()
       | None -> loop 0 ()
   in
   loop 0 ()

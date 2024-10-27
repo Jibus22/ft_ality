@@ -1,6 +1,5 @@
 let ( >>= ) = Result.bind
 let usage = "Usage: ft_ality [-v] <gmr-file>"
-let emptylogger _ _ = ()
 
 let exit_usage ?(opt = "") () =
   prerr_endline @@ opt ^ usage;
@@ -17,10 +16,7 @@ let start ?(v = false) filename =
   | Ok ((transitions, comboname_state_mapping, keymapping) as triple) ->
       Ft_ality.Print.print_keymapping keymapping;
       if v then Ft_ality.Print.print_verbose transitions comboname_state_mapping;
-      Run.evaluate triple
-        ( Ft_ality.Print.log_move,
-          Ft_ality.Print.log_combo_name,
-          if v then Ft_ality.Print.log_verbose else emptylogger )
+      Run.evaluate triple (Ft_ality.Print.combo_logger v)
   | Error e -> prerr_endline e
 
 let () =

@@ -1,9 +1,14 @@
 let max_w = 80
+let delimiter = String.make max_w '*'
+let delimiter_nl = "\n" ^ String.make max_w '*'
 let soi = string_of_int
 let get_transition_s (s, m, e) = "(" ^ soi s ^ ", [" ^ m ^ "], " ^ soi e ^ ")"
 let get_move_s ?(nl = "\n") movename = "[" ^ movename ^ "]" ^ nl
 let get_keymapping_s (key, movename) = key ^ " -> " ^ get_move_s movename
 let get_verbose_s fs name = "found end state for '" ^ name ^ "' at: " ^ soi fs
+
+let get_transition_s2 (s, m, e) =
+  "State " ^ soi s ^ ", [" ^ m ^ "], -> State " ^ soi e ^ "\n"
 
 let get_combomap_s (_, (finale_state, combo_name)) =
   "{" ^ soi finale_state ^ " -> " ^ combo_name ^ "}"
@@ -29,19 +34,26 @@ let concat_combomap acc combomap = concat get_combomap_s acc combomap
 let concat_keymapping acc keymapping = concat get_keymapping_s acc keymapping
 let concat_moves acc move = concat (get_move_s ~nl:", ") acc move
 let fold f title lst = List.fold_left f title lst
-let print f title a = print_endline @@ fold f title a
-let print_transitions = print concat_transitions "Transitions:\n"
-let print_keymapping = print concat_keymapping "key mapping:\n"
+let print ?(nl = "") f title a = print_endline @@ fold f title a ^ nl
+
+let print_transitions =
+  print ~nl:delimiter_nl concat_transitions "Transitions:\n"
+
+let print_keymapping = print ~nl:delimiter concat_keymapping "key mapping:\n"
 let log_move m = print_endline @@ get_move_s ~nl:"" m
 let log_verbose fs name = print_endline @@ get_verbose_s fs name
 
-let log_combo_name moves cbn =
+let combo_logger v (moves, (fs, name)) transition =
+  let verbose =
+    "\n" ^ get_transition_s2 transition ^ get_verbose_s fs name ^ "\n"
+  in
   print_endline
   @@ (fold concat_moves "" moves |> remove_trailing_comma)
-  ^ "\n" ^ cbn
+  ^ (if v then verbose else "")
+  ^ name
 
 let print_combomap cb_lst =
-  print concat_combomap "Final states -> combo name:\n" cb_lst
+  print ~nl:delimiter_nl concat_combomap "Final states -> combo name:\n" cb_lst
 
 let print_verbose tr cb =
   print_transitions tr;
