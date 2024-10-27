@@ -6,9 +6,6 @@ let pick_nested_maxstate pair_lst =
   let max_lst, _ = List.split pair_lst in
   max_lst
 
-let tr_compare (i1, m1, o1) (i2, m2, o2) =
-  Int.(compare i1 i2 + compare o1 o2) + String.compare m1 m2
-
 let tr_eq_partial (i1, m1) (i2, m2, _) = i1 = i2 && m1 = m2
 let concat_tr_lists pair_lst tr_lst = pick_nested_move_lst pair_lst @ tr_lst
 
@@ -32,8 +29,10 @@ let build_transition pair_lst (st_in, tr_lst) move =
       let next_state = (get_maxstate @@ concat_tr_lists pair_lst tr_lst) + 1 in
       (next_state, (st_in, move, next_state) :: tr_lst)
 
-let get_transition_list pair_lst l =
-  let final_st, tr_lst = List.fold_left (build_transition pair_lst) (0, []) l in
+let get_transition_list pair_lst move_lst =
+  let final_st, tr_lst =
+    List.fold_left (build_transition pair_lst) (0, []) move_lst
+  in
   (final_st, List.rev tr_lst) :: pair_lst
 
 let el_equal e1 e2 = Int.compare e1 e2 = 0
@@ -62,6 +61,9 @@ let get_missing_transitions transitions =
   |> List.map (create_missing_transitions all_states)
   |> List.flatten
 
+let remove_duplicates l =
+  List.fold_left (fun acc tr -> if List.mem tr acc then acc else tr :: acc) [] l
+
 let train combos =
   let combo_moves, combo_names = List.split combos in
   let final_states, transitions_lst =
@@ -70,7 +72,6 @@ let train combos =
   let comboname_state_mapping =
     List.combine final_states combo_names |> List.combine combo_moves
   and transitions =
-    List.flatten transitions_lst
-    |> List.sort_uniq tr_compare |> get_missing_transitions
+    List.flatten transitions_lst |> remove_duplicates |> get_missing_transitions
   in
   Ok (transitions, comboname_state_mapping)
