@@ -51,9 +51,10 @@ let create_assoc_lst acc (in_st, m, out_st) =
 
 let create_missing_transitions all_states (move_name, tr) =
   let input_state = get_all_input_st tr in
-  let diff = difference all_states input_state
-  and _, _, o = List.find (tr_eq_partial (0, move_name)) tr in
-  List.map (fun st -> (st, move_name, o)) diff @ tr
+  let diff = difference all_states input_state in
+  match List.find_opt (tr_eq_partial (0, move_name)) tr with
+  | Some (_, _, o) -> List.map (fun st -> (st, move_name, o)) diff @ tr
+  | None -> tr
 
 let get_missing_transitions transitions =
   let all_states = get_all_states transitions in

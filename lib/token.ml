@@ -31,8 +31,9 @@ let get filename =
   let ic = open_in filename in
   let rec read_all_lines s (keymapping, combos) =
     try
-      let line = input_line ic in
-      if String.trim line = "*" then read_all_lines Combos (keymapping, combos)
+      let line = input_line ic |> String.trim in
+      if line = "*" then read_all_lines Combos (keymapping, combos)
+      else if line = "" then read_all_lines s (keymapping, combos)
       else tokenize s line (keymapping, combos)
     with End_of_file ->
       close_in ic;
