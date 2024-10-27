@@ -11,7 +11,7 @@ let sanitize_keymapping km =
 
 let sanitize_combos cb kmn =
   let combo_mv, _ = List.split cb in
-  let m_lst = List.map (fun a -> List.fold_left ( ^ ) "" a) combo_mv in
+  let m_lst = List.map (List.fold_left ( ^ ) "") combo_mv in
   if find_duplicate m_lst then Error "combo moves must be uniques"
   else
     let combo_diff = List.filter (Fun.negate @@ is_difference kmn) combo_mv in
@@ -20,8 +20,6 @@ let sanitize_combos cb kmn =
     else Ok ()
 
 let sanitize_data (keymapping, combos) =
-  match
-    sanitize_keymapping keymapping >>= fun m -> sanitize_combos combos m
-  with
+  match sanitize_keymapping keymapping >>= sanitize_combos combos with
   | Ok _ -> Ok ()
   | Error e -> Error ("Sanitize error: " ^ e)
