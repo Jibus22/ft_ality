@@ -34,6 +34,7 @@ keymapping:
 ...
 ```
 `key` must match the keyname of a keyboard. The only special keys we can set otherwise are `left`, `right`, `up`, `down`.
+
 combomapping:
 ```
 <move>[,<move1>,...,<moveN>]:<comboname>
@@ -71,25 +72,25 @@ If we break down combomapping this is what we want to have first as transitions:
 HP,LP,Down -> (0 HP 1); (1 LP 2); (2 Down 3)
 HP,HP,LP -> (0 HP 1); (1 HP 4); (4 LP 5)
 ```
+
 We always start from state 0. If we press `q` (`HP` move) we then go to the state 1. In state 1, we can either  press `s` or `q` to go to state 2 or 4.
 In state 4 if we do `LP` we go to state 5 and trigger the `Head Smash` combo.
 
-
 *Note: if another key which is not mapped in `keymapping` or ever used in `combomapping` is pressed we go back to state 0 (that is not part of my FSM implementation but rather the run loop because it's useless to create transitions to every keys which aren't used in combos nor written in the grammar file).*
-This gives us two final states: `3` and `5`.
 
+This gives us two final states: `3` and `5`.
 
 That's good but now we must add some missing transitions. What if we are in state 5 and press `HP` ? What if we are in state 3 and press `HP` ? There's no transitions which begins with 3 or 5. We could imagine to implement a logic which find if we are in a final state (3 or 5 here) we reset the state to 0 instead of staying in this state, but it wouldn't work if we have a final state to 1 with a combo like this: `HP:Front Kick`. It's safer and a better design to stick with the state machine logic and create missing transitions like `(3, HP, 1)` Which would permit to begin a `Backflip Kick` combo or a `Head Smash` combo just after being in state `3`.
 
 
 So after having created basic transitions we create the missing one as follow:
-we have all states: `[0; 1; 2; 3; 4; 5]`
-grouping them by moves:
-`(0, HP, 1); (1, HP, 4)` ->
-we group all inputs: `[0; 1]` of `HP`
-We add all missing inputs (`[2; 3; 4; 5]`) to the entry transition: `[(5, [HP], 1); (4, [HP], 1); (3, [HP], 1); (2, [HP], 1)]`
-`(1, LP, 2); (4, LP, 5)` -> Nothing to add as there is no entry transition (transition beginning with 0)
-`(2, Down, 3)` -> Nothing to add
+
+- we have all states: `[0; 1; 2; 3; 4; 5]`
+- grouping them by moves: `(0, HP, 1); (1, HP, 4)` ->
+- we group all inputs: `[0; 1]` of `HP`
+- We add all missing inputs (`[2; 3; 4; 5]`) to the entry transition: `[(5, [HP], 1); (4, [HP], 1); (3, [HP], 1); (2, [HP], 1)]`
+- `(1, LP, 2); (4, LP, 5)` -> Nothing to add as there is no entry transition (transition beginning with 0)
+- `(2, Down, 3)` -> Nothing to add
 
 We finally end up having these transitions:
 ```
@@ -104,6 +105,7 @@ The run loop just has to find if a transition match with the pressed key by chec
 This codebase follows the functionnal programming principles, that is using immutable constructions, recursive functions and preferably tail recursive ones, short function implementations, avoid exceptions as mush as possible.
 
 As a result to the last expectation I used a lot the Option/Result modules, in a monadic style using the bind operator `>>=` to avoid nested pattern matching.
+
 Example:
 https://github.com/Jibus22/ft_ality/blob/c63715c0ff90faac1856a9256406bb3162d2fb90/lib/sanitize.ml#L22-L25
 
