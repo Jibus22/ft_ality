@@ -6,13 +6,14 @@ description:
 maintainer: ["jle-corr"]
 authors: ["jle-corr"]
 license: "GPL-3.0-or-later"
-tags: ["topics" "functional programming, FSM" "your" "project"]
+tags: ["functional programming" "FSM"]
 homepage: "https://github.com/Jibus22/ft_ality"
 doc: "https://github.com/Jibus22/ft_ality"
 bug-reports: "https://github.com/Jibus22/ft_ality/issues"
 depends: [
   "ocaml"
   "dune" {>= "3.16"}
+  "alcotest"
   "odoc" {with-doc}
 ]
 build: [

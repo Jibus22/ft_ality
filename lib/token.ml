@@ -28,27 +28,29 @@ let tokenize_keymapping = strlines_to_tuplelst
 let tokenize_moves s = strlines_to_tuplelst s |> Fun.flip ( >>= ) make_move_lst
 
 let get filename =
-  let ic = open_in filename in
-  let rec read_all_lines s (keymapping, combos) =
-    try
-      let line = input_line ic |> String.trim in
-      if line = "*" then read_all_lines Combos (keymapping, combos)
-      else if line = "" then read_all_lines s (keymapping, combos)
-      else tokenize s line (keymapping, combos)
-    with End_of_file ->
-      close_in ic;
-      Ok (List.rev keymapping, List.rev combos)
-  and tokenize s line (keymapping, combos) =
-    match s with
-    | Keymapping ->
-        tokenize_keymapping line >>= fun km ->
-        read_all_lines s (km :: keymapping, combos)
-    | Combos ->
-        tokenize_moves line >>= fun (m, n) ->
-        m >>= fun mv -> read_all_lines s (keymapping, (mv, n) :: combos)
-  in
-  match read_all_lines Keymapping ([], []) with
-  | Ok p -> Ok p
-  | Error e ->
-      close_in ic;
-      Error ("Tokenization error: " ^ e)
+  try
+    let ic = open_in filename in
+    let rec read_all_lines s (keymapping, combos) =
+      try
+        let line = input_line ic |> String.trim in
+        if line = "*" then read_all_lines Combos (keymapping, combos)
+        else if line = "" then read_all_lines s (keymapping, combos)
+        else tokenize s line (keymapping, combos)
+      with End_of_file ->
+        close_in ic;
+        Ok (List.rev keymapping, List.rev combos)
+    and tokenize s line (keymapping, combos) =
+      match s with
+      | Keymapping ->
+          tokenize_keymapping line >>= fun km ->
+          read_all_lines s (km :: keymapping, combos)
+      | Combos ->
+          tokenize_moves line >>= fun (m, n) ->
+          m >>= fun mv -> read_all_lines s (keymapping, (mv, n) :: combos)
+    in
+    match read_all_lines Keymapping ([], []) with
+    | Ok p -> Ok p
+    | Error e ->
+        close_in ic;
+        Error ("Tokenization error: " ^ e)
+  with Sys_error msg -> Error ("get " ^ filename ^ " error: " ^ msg)

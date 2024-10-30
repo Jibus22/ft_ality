@@ -19,6 +19,6 @@
  (name ft_ality)
  (synopsis "Automaton")
  (description "Finite state machine taking a grammar file to be trained to respond to user commands")
- (depends ocaml dune)
+ (depends ocaml dune alcotest)
  (tags
-  (topics "functional programming, FSM" your project)))
+  ("functional programming" FSM)))

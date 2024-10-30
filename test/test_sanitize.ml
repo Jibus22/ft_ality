@@ -10,7 +10,7 @@ let test_valid_data () =
   let keymapping = [ ("a", "KM1"); ("b", "KM2") ] in
   let combos = [ ([ "KM1" ], "Combo1"); ([ "KM2" ], "Combo2") ] in
   match sanitize_data (keymapping, combos) with
-  | Ok () -> () (* Pass *)
+  | Ok () -> ()
   | Error e -> failf "Expected Ok, but got Error: %s" e
 
 let test_duplicate_keys () =
@@ -41,7 +41,6 @@ let test_invalid_combo_move_names () =
     (sanitize_data (keymapping, combos))
     "Sanitize error: combo move name must match with key mapping names"
 
-(* Register the test suite *)
 let () =
   let open Alcotest in
   run "Sanitize Data Tests"
