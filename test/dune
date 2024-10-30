@@ -1,2 +1,11 @@
 (test
- (name test_ft_ality))
+ (name test_token_get)
+ (libraries alcotest ft_ality))
+
+(test
+ (name test_sanitize)
+ (libraries alcotest ft_ality))
+
+(test
+ (name test_training)
+ (libraries alcotest ft_ality))
