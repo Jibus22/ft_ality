@@ -48,13 +48,11 @@ let print_transitions =
 let print_keymapping = print ~nl:delimiter concat_keymapping "key mapping:\n"
 
 let combo_logger v (moves, (fs, name)) transition =
-  let verbose =
-    "\n" ^ get_transition_s2 transition ^ get_verbose_s fs name ^ "\n"
-  in
+  let verbose = "\n" ^ get_transition_s2 transition ^ get_verbose_s fs name in
   print_endline
   @@ (get_moves_s moves |> remove_trailing_comma)
   ^ (if v then verbose else "")
-  ^ name
+  ^ "\n" ^ name
 
 let print_combomap cb_lst =
   print ~nl:delimiter_nl concat_combomap "Final states -> combo name:\n" cb_lst
