@@ -117,4 +117,4 @@ https://ocaml.org/docs/monads
 
 ---
 
-![Enregistrementdelecran2024-10-30a23 40 12-ezgif com-speed](https://github.com/user-attachments/assets/d3bdf0db-7b20-4b3b-bc37-a50843343328)
+![ftality](https://github.com/user-attachments/assets/e82108d5-6d78-434c-b5f3-35d1659cd975)
